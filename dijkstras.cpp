@@ -2,7 +2,7 @@
 #include <string>
 #include <climits>
 #include <vector>
-#include <iomanip> // For std::setw
+#include <iomanip> 
 using namespace std;
 
 #define INF INT_MAX
@@ -19,39 +19,34 @@ int mindistance(int distance[], bool stat[]) {
     return ind;
 }
 
-// Function to print the path from source to destination
 void printPath(vector<int>& parent, int j, string stations[]) {
     if (parent[j] == -1) {
-        cout << stations[j];  // Print the source station
+        cout << stations[j];  
         return;
     }
     printPath(parent, parent[j], stations);
     cout << " -> " << stations[j];
 }
-
-// Dijkstra's algorithm to find the shortest path
 void dijkstra(int graph[NUM_STATIONS][NUM_STATIONS], int source, string stations[], int distance[], vector<int>& parent) {
     bool stat[NUM_STATIONS];
 
-    // Initialize distances and stat array
     for (int k = 0; k < NUM_STATIONS; k++) {
         distance[k] = INF;
         stat[k] = false;
-        parent[k] = -1;  // Store the shortest path
+        parent[k] = -1;  
     }
     distance[source] = 0;
 
-    // Main loop of Dijkstra's algorithm
     for (int k = 0; k < NUM_STATIONS - 1; k++) {
         int m = mindistance(distance, stat);
-        if (m == -1) break; // If no valid node is found, exit
+        if (m == -1) break;
 
         stat[m] = true;
 
         for (int k = 0; k < NUM_STATIONS; k++) {
             if (!stat[k] && graph[m][k] && distance[m] != INF && distance[m] + graph[m][k] < distance[k]) {
                 distance[k] = distance[m] + graph[m][k];
-                parent[k] = m;  // Store the previous station
+                parent[k] = m;  
             }
         }
     }
@@ -59,15 +54,13 @@ void dijkstra(int graph[NUM_STATIONS][NUM_STATIONS], int source, string stations
 
 // Function to display the station index table in a well-formatted way
 void displayStationTable(string stations[]) {
-    cout << string(70, '_') << endl;  // Top border
-
+    cout << string(70, '_') << endl;  
     for (int i = 0; i < NUM_STATIONS; i++) {
         cout << "| " << setw(2) << i  << " | " << left << setw(20) << stations[i] << " ";
 
-        // Print column separator
         if ((i + 1) % 3 == 0 || i == NUM_STATIONS - 1) {
             cout << "|" << endl;
-            cout << string(70, '_') << endl;  // Row separator
+            cout << string(70, '_') << endl;  
         }
     }
 }
@@ -131,7 +124,7 @@ int main() {
 
     };
 
-    // Station names
+    // Bus stop names
     string stations[NUM_STATIONS] = {
         "Hanuman Junction", "Gannavaram", "Nidamanuru", "Penamauru", "Ganguru",
         "Chodavaram", "Poranki", "Pedapulapaka", "Yanamalakudur", "Auto Nagar",
@@ -156,11 +149,9 @@ int main() {
     cout << "Choose an option:\n1) Distance from A to B\n2) Path from A to B\n3) Nodes directly connected to A\n";
     cin >> choice;
 
-    // Prepare distance and parent arrays
     int distance[NUM_STATIONS];
     vector<int> parent(NUM_STATIONS, -1);
 
-    // Run Dijkstra's algorithm
     dijkstra(graph, source, stations, distance, parent);
 
     switch (choice) {
